@@ -27,6 +27,11 @@ export const contacts = (req, res) => {
   });
 };
 
+
+export const Check =(req,res)=>{
+  res.status(200).send("Subscribed Successfully:")
+}
+
 export const subscription = (req, res) => {
   //nodemailer with outlook
   const transporter = nodemailer.createTransport({
