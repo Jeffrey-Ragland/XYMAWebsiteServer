@@ -1,13 +1,8 @@
-//require('dotenv').config();
-// const express = require('express');
-// const nodemailer = require('nodemailer');
-// const bodyParser = require("body-parser");
-// const cors = require("cors");
-
 import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import router from './apiRoutes.js'
@@ -17,11 +12,14 @@ app.use(bodyParser.json());
 app.use(
   cors({
     mode: "no-cors",
-    origin: ["http://34.93.162.58:3000"],
+    //origin: ["http://34.93.162.58:3000"], 
+    origin: ['http://localhost:3000'],
     methods: ["GET", "POST"],
     credentials: true,
   })
 );
+
+mongoose.connect('mongodb://127.0.0.1:27017/website');
 
 app.use('/backend', router);
 
