@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import AdminInfoModel from "./models/AdminInfoSchema.js";
+import PositionModel from "./models/PositionSchema.js";
 
 //contact page form
 export const contacts = (req, res) => {
@@ -100,8 +101,6 @@ export const adminSignup = (req,res) =>
 export const adminLogin = (req,res) =>
 {
   const {Username, Password} = req.body;
-  console.log('username',Username);
-  console.log('password',Password);
   AdminInfoModel.findOne({Username: Username})
   .then(user => {
     if(user) {
@@ -113,33 +112,69 @@ export const adminLogin = (req,res) =>
         }
         else {
           res.json('incorrect password');
-          console.log('incorrect password');
         }
       })
     }
     else {
       res.json('invalid user');
-      console.log('invalid user');
     }
   })
   .catch(err => console.log(err));
 };
 
-//jwt token validation -> protected route
+//jwt token validation -> protected route -> admin portal
 export const validateToken = (req,res) => {
-  console.log('validation api triggered');
   const token = req.headers['authorization'];
-  console.log('token',token);
   if(!token) 
     return  res.json({valid: false}) 
-            console.log('invalid');
 
   jwt.verify(token, 'jwt-secret-key', (err, user) => {
     if(err) 
       return  res.json({valid: false});
-              console.log("invalid");
 
     res.json({valid: true});
-    console.log("valid");
+  });
+};
+
+//add position
+export const addPosition = (req,res) => {
+  const {DeptName, PositionName, PositionDesc, date} = req.body;
+  PositionModel.create({DepartmentName: DeptName, Position: PositionName, PositionDescription: PositionDesc, LastDate: date })
+  .then(info => res.json(info))
+  .catch(err => res.json(err));
+}
+
+//get position
+export const getPosition = (req,res) => {
+  PositionModel.find()
+  .then(positions => res.json(positions))
+  .catch(err => res.status(500).json(err));
+}
+
+//delete position
+export const deletePosition = (req,res) => {
+  const {id} = req.params;
+  PositionModel.findByIdAndDelete(id)
+  .then(() => {
+    res.json({message: 'Position Deleted Successfully'});
+  })
+  .catch((err) => {
+    res.status(500).json({error: err.message});
+  });
+};
+
+// update position
+export const updatePosition = (req,res) => {
+  const {PositionName, PositionDesc} = req.body;
+  const {id} = req.params;
+  PositionModel.findByIdAndUpdate(id, {Position: PositionName, PositionDescription: PositionDesc}, { new: true })
+  .then((updatedPosition) => {
+    if(!updatedPosition) {
+      return res.status(404).json({error : 'Position not found'});
+    }
+    res.json({message: 'Position updated successfully', updatedPosition});
+  })
+  .catch((error) => {
+    res.status(500).json({error: error.message});
   });
 };
