@@ -165,9 +165,9 @@ export const deletePosition = (req,res) => {
 
 // update position
 export const updatePosition = (req,res) => {
-  const {PositionName, PositionDesc} = req.body;
+  const {PositionName, PositionDesc, LastDate} = req.body;
   const {id} = req.params;
-  PositionModel.findByIdAndUpdate(id, {Position: PositionName, PositionDescription: PositionDesc}, { new: true })
+  PositionModel.findByIdAndUpdate(id, {Position: PositionName, PositionDescription: PositionDesc, LastDate: LastDate}, { new: true })
   .then((updatedPosition) => {
     if(!updatedPosition) {
       return res.status(404).json({error : 'Position not found'});
