@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import AdminInfoModel from "./models/AdminInfoSchema.js";
 import PositionModel from "./models/PositionSchema.js";
+import ApplicationFormModel from "./models/ApplicationFormSchema.js";
 
 //contact page form
 export const contacts = (req, res) => {
@@ -176,5 +177,29 @@ export const updatePosition = (req,res) => {
   })
   .catch((error) => {
     res.status(500).json({error: error.message});
+  });
+};
+
+//add application form in careers to db
+export const uploadApplicationForm = (req,res) => {
+
+  const {Name, Age, ApplyingForDepartment, ApplyingForPosition} = req.body;
+  const { buffer } = req.file
+  ApplicationFormModel.create({
+    Name: Name,
+    Age: Age,
+    Resume: {
+      data: buffer,
+      contentType: "application/pdf",
+    },
+    ApplyingForDepartment: ApplyingForDepartment,
+    ApplyingForPosition: ApplyingForPosition
+  })
+  .then(pdf => {
+    res.status(200).send('Application form saved successfully');
+  })
+  .catch(err => {
+    console.error(err);
+    res.status(500).send('Error saving appllication form');
   });
 };
