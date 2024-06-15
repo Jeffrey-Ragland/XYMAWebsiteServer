@@ -203,3 +203,10 @@ export const uploadApplicationForm = (req,res) => {
     res.status(500).send('Error saving appllication form');
   });
 };
+
+// get application forms
+export const getApplicationForm = (req,res) => {
+  ApplicationFormModel.find()
+    .then((applicationForms) => res.json(applicationForms))
+    .catch((err) => res.status(500).json(err));
+}
