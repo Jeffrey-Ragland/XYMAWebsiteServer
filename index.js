@@ -183,25 +183,36 @@ export const updatePosition = (req,res) => {
 //add application form in careers to db
 export const uploadApplicationForm = (req,res) => {
 
-  const {Name, Age, ApplyingForDepartment, ApplyingForPosition} = req.body;
+  const {Name, Email, Phone, LinkedIn, ExpectedSalary, PrevJobCompany, PrevJobTitle, SelfIntro, WhyIntrested, YourExpectations, OurExpectations, Relocate, StartDate, ApplyingForDepartment, ApplyingForPosition} = req.body;
   const { buffer } = req.file
   ApplicationFormModel.create({
-    Name: Name,
-    Age: Age,
+    Name,
+    Email,
+    Phone,
+    LinkedIn,
+    ExpectedSalary,
+    PrevJobCompany,
+    PrevJobTitle,
+    SelfIntro,
+    WhyIntrested,
+    YourExpectations,
+    OurExpectations,
+    Relocate,
+    StartDate,
     Resume: {
       data: buffer,
       contentType: "application/pdf",
     },
-    ApplyingForDepartment: ApplyingForDepartment,
-    ApplyingForPosition: ApplyingForPosition
+    ApplyingForDepartment,
+    ApplyingForPosition,
   })
-  .then(pdf => {
-    res.status(200).send('Application form saved successfully');
-  })
-  .catch(err => {
-    console.error(err);
-    res.status(500).send('Error saving appllication form');
-  });
+    .then((pdf) => {
+      res.status(200).send("Application form saved successfully");
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving appllication form");
+    });
 };
 
 // get application forms
