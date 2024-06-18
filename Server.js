@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 app.use(
   cors({
     mode: "no-cors",
-    //origin: ["http://34.93.162.58:3000"], 
-    origin: ['http://localhost:3000'],
+    origin: ["http://34.93.162.58:3000"], 
+    // origin: ['http://localhost:3000'],
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
